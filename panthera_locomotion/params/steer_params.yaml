@@ -1,4 +1,4 @@
-lb_pid: {'kp': 27, 'ki': 15, 'kd': 25, 'ir': 60}#{'kp': 25, 'ki': 20, 'kd': 20, 'ir': 75}
+lb_pid: {'kp': 27, 'ki': 15, 'kd': 18, 'ir': 70}#{'kp': 25, 'ki': 20, 'kd': 20, 'ir': 75}
 lb_serial_number: 'FT4IXXKB'#'FT4IT45E'#FT40DJ6B'
 lb_max_speed: 200
 

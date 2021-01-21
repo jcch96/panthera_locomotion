@@ -25,7 +25,7 @@ class TransMotor():
 		self.motor = self.orienbus.initialize(self.address)
 
 		self.width = 0.68
-		self.length = 1.31
+		self.length = 1.34
 		self.wheel_radius = 0.1
 		self.gear_ratio = 100
 
@@ -57,10 +57,10 @@ class TransMotor():
 
 	def motor_lin_vel(self, vx, wz):
 		sign = wz / abs(wz)
-		r = abs(vx / wz)
-		speed = sign*(math.sqrt((r - sign*self.width/2)**2 + (self.length/2)**2) * abs(wz)) # check + or - 
-		if r < self.width/2 and vx/wz < 0:
-			speed  = -speed
+		r = vx / wz
+		speed = (math.sqrt((r - self.sign*self.width/2)**2 + (self.length/2)**2) * abs(wz)) # check + or - 
+		if abs(r) < self.width/2:
+			speed  = -sign*self.sign*speed
 		else:
 			pass
 		return speed # check motor direction 
@@ -81,7 +81,7 @@ class TransMotor():
 				rpm = 0
 				speed = 0
 				self.motor.writeSpeed(rpm)
-				#print("lf rpm: 0")
+				#print(" rpm: 0")
 
 			else:
 				speed = -self.sign*wz * math.sqrt((self.length/2)**2 + (self.width/2)**2) / self.wheel_radius

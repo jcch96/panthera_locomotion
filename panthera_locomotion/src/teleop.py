@@ -9,7 +9,7 @@ from panthera_locomotion.srv import Status, StatusRequest, StatusResponse
 import serial.tools.list_ports as lp
 
 width = 0.68
-length = 1.31
+length = 1.34
 
 lb = 0
 lf = 0
@@ -822,11 +822,11 @@ if __name__ == "__main__":
 			print("t: Expand Left")
 			print("u: Expand Right")
 			#print("y: Expand Both Sides")
-			print("y: Reverse curve left")
+			print("y: Reverse curve right")
 			print("g: Contract Left")
 			print("j: Contract Right")
 			#print("h: Contract Both Sides")
-			print("h: Reverse curve right")
+			print("h: Reverse curve left")
 			print("1: Dynamic Contract to Left")
 			print("2: Dynamic Contract to Right")
 			print("3: Dynamic Contract to Centre")

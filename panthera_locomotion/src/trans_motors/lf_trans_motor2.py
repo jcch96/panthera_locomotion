@@ -21,6 +21,7 @@ if __name__ == "__main__":
 				#print("lf rpm: " + str(lf_motor.wheel_speed))
 				lf_motor.motor.writeSpeed(lf_motor.wheel_speed)
 			lf_motor.pub_wheel_vel()
+			#print("lf speed: " + str(lf_motor.wheel_velocity))
 			#rate.sleep()
 	except rospy.ROSInterruptException:
 		pass

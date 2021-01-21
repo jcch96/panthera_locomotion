@@ -2,7 +2,7 @@ import orienbus
 import getch
 import time
 
-port = '/dev/ttyUSB0' # modbus port 
+port = '/dev/ttyUSB5' # modbus port 
 
 # Create orienbus object with port name
 orienbus = orienbus.OrienBus(port)
