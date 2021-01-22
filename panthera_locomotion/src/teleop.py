@@ -179,7 +179,8 @@ def run(x):
 		twist.angular.z = 0
 		pub.publish(twist)
 
-	elif x == 'e':
+	elif x == 'e': # turn right with radius
+		#reconfig(False)
 		adjust_wheels(linear_x, -angular_z)
 		twist.linear.x = lb
 		twist.linear.y = rb
@@ -196,7 +197,8 @@ def run(x):
 		twist.angular.z = -angular_z
 		pub.publish(twist)
 
-	elif x == 'q':
+	elif x == 'q': # turn left with radius
+		#reconfig(False)
 		adjust_wheels(linear_x, angular_z)
 		twist.linear.x = lb
 		twist.linear.y = rb

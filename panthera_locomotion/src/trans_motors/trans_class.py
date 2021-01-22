@@ -58,9 +58,10 @@ class TransMotor():
 	def motor_lin_vel(self, vx, wz):
 		sign = wz / abs(wz)
 		r = vx / wz
-		speed = (math.sqrt((r - self.sign*self.width/2)**2 + (self.length/2)**2) * abs(wz)) # check + or - 
+		rot_dir = vx / abs(vx)
+		speed = rot_dir*(math.sqrt((r - self.sign*self.width/2)**2 + (self.length/2)**2) * abs(wz)) # check + or - 
 		if abs(r) < self.width/2:
-			speed  = -sign*self.sign*speed
+			speed  = -sign*self.sign*speed*rot_dir
 		else:
 			pass
 		return speed # check motor direction 
