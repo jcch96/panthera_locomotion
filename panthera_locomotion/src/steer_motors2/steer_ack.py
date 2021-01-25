@@ -13,9 +13,12 @@ class SteerMotor():
 	def __init__(self, name, address):
 		self.name = name
 		self.address = address
+		self.min_turning_radius = 1.34
+		self.length = 1.34
+		self.width = 0.68
 		# Specific motor parameters
 		rospy.Subscriber('/can_encoder', Twist, self.encoder_pos)
-		rospy.Subscriber('cmd_vel', Twist, self.desired_pos)
+		rospy.Subscriber('/cmd_vel', Twist, self.cmd_vel)
 		service = rospy.Service('{}_reconfig_status'.format(name), Status, self.callback)
 		serv = rospy.Service('{}_steer_status'.format(name), Status, self.steer_stat)
 
@@ -32,9 +35,11 @@ class SteerMotor():
 		self.orienbus = orienbus.OrienBus(self.port)
 		self.motor = self.orienbus.initialize(self.address)
 
+		#self.length = 1.34
+		#self.width = 0.68
+
 		# Angles and erros
 		self.target = 0
-		self.target_change = 0
 		self.position = 0
 		self.complement = 0
 		self.complement_target = 0
@@ -46,10 +51,38 @@ class SteerMotor():
 
 		self.motor_speed = 0
 
-		self.control_activation = 5
-		self.inner_max_speed = 800
+		self.control_activation = 3
+		self.inner_max_speed = 400
+		#self.min_turning_radius = 1.34
 
-		self.reconfig = True
+		self.reconfig = False
+
+	def cmd_vel(self, data): # radius in m, direction c(-1) or ccw(1)
+		lf = 0
+		rf = 0
+		if data.angular.z == 0:
+			r = float('inf')
+		else:
+			r = data.linear.x / data.angular.z
+		if abs(r) <= self.min_turning_radius:
+			pass
+		else:
+			if r < 0:
+				rf = -math.atan(self.length / (abs(r)-self.width/2))
+				lf = -math.atan(self.length / (abs(r)+self.width/2))
+			elif r > 0:
+				rf = math.atan(self.length / (abs(r)+self.width/2))
+				lf = math.atan(self.length / (abs(r)-self.width/2))
+			elif r == 0:
+				rf = 0
+				lf = 0
+
+		if self.name == "lf":
+			self.target = lf*360/(2*math.pi)
+		elif self.name == "rf":
+			self.target = rf*360/(2*math.pi)
+		else:
+			self.target = 0
 
 	def callback(self, req):
 		self.reconfig = req.reconfig
@@ -77,23 +110,6 @@ class SteerMotor():
 		elif self.name == 'rf':
 			self.position = data.angular.x
 			self.complement = data.linear.z
-
-	def desired_pos(self, data):
-		if self.name == 'lb':
-			self.target = data.linear.x
-			self.complement_target = data.linear.y
-
-		elif self.name == 'rb':
-			self.target = data.linear.y
-			self.complement_target = data.linear.x
-
-		elif self.name == 'lf':
-			self.target = data.linear.z
-			self.complement_target = data.angular.x
-
-		elif self.name == 'rf':
-			self.target = data.angular.x
-			self.complement_target = data.linear.z
 
 	def proportional(self, desired, actual): #error - current angle
 	    prop =  self.kp * (desired - actual)
@@ -212,5 +228,7 @@ class SteerMotor():
 
 		if abs(i) >= self.integral_reset:
 			self.accu_error = 0
-
-		#print(self.name + ': ' + str(self.motor_speed))
+		'''
+		if self.name == 'lf' or self.name == 'rf':
+			print(self.name + ': ' + str(self.current_error))
+	'''

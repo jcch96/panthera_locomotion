@@ -173,14 +173,14 @@ def run(x):
 		
 		# Check if wheels have adjusted before moving
 		rospy.sleep(1)
-		check()
+		#check()
 
 		twist.angular.y = linear_x
 		twist.angular.z = 0
 		pub.publish(twist)
 
 	elif x == 'e': # turn right with radius
-		#reconfig(False)
+		reconfig(False)
 		adjust_wheels(linear_x, -angular_z)
 		twist.linear.x = lb
 		twist.linear.y = rb
@@ -191,7 +191,7 @@ def run(x):
 		pub.publish(twist)
 		
 		# Check if wheels have adjusted before moving
-		check()
+		#check()
 
 		twist.angular.y = linear_x
 		twist.angular.z = -angular_z
@@ -209,7 +209,7 @@ def run(x):
 		pub.publish(twist)
 		
 		# Check if wheels have adjusted before moving
-		check()
+		#check()
 
 		twist.angular.y = linear_x
 		twist.angular.z = angular_z
@@ -764,13 +764,13 @@ def run(x):
 	# ADJUST VX AND WZ DEFAULT SPEEDS
 
 	elif x == 'o':
-		linear_x += 0.05
+		linear_x += 0.01
 
 	elif x == 'p':
 		angular_z += 0.01
 
 	elif x == 'n':
-		linear_x -= 0.05
+		linear_x -= 0.01
 
 	elif x == 'm':
 		angular_z -= 0.01
@@ -784,7 +784,7 @@ if __name__ == "__main__":
 		rospy.init_node('controller')
 		ser = serial.Serial(port)
 		sub = rospy.Subscriber('can_encoder', Twist, enc_pos)
-		pub = rospy.Publisher('target_angle', Twist, queue_size=1)
+		pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
 		recon = rospy.Publisher('reconfig', Twist, queue_size=1)
 		h_loc = rospy.Subscriber('/human_loc', Point32, human_loc)
 
@@ -809,7 +809,8 @@ if __name__ == "__main__":
 		rf_stat = rospy.ServiceProxy('rf_reconfig_status', Status)
 		
 		rate = rospy.Rate(1)
-		while not rospy.is_shutdown():
+		switch = True
+		while switch == True:
 			
 			print("w: Forward")
 			print("r: Reverse")
@@ -817,8 +818,8 @@ if __name__ == "__main__":
 			print("q: Turn Left with a radius vx/wz")
 			print("d/a: L/R On the spot rotation")
 			print("s: Align wheels to 0 and stop")
-			print("o/p: increase vx and wz by +0.05/+0.01")
-			print("n/m: decrease vx and wz by -0.05/-0.01")
+			print("o/p: increase vx and wz by +0.01/+0.01")
+			print("n/m: decrease vx and wz by -0.01/-0.01")
 			print("c: 90 Degrees right")
 			print("z: 90 Degrees left")
 			print("t: Expand Left")
@@ -843,6 +844,8 @@ if __name__ == "__main__":
 			print(cmd, state)
 			#print(x_dist, z_dist)
 			'''
+			if cmd == " ":
+				switch = False
 
 			run(cmd)
 			rate.sleep()

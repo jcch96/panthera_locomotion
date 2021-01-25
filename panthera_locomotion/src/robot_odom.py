@@ -14,7 +14,7 @@ class RobotOdom():
 		rospy.Subscriber('/lf_wheel_vel', Float32, self.lf_lin_vel)
 		rospy.Subscriber('/rb_wheel_vel', Float32, self.rb_lin_vel)
 		rospy.Subscriber('/rf_wheel_vel', Float32, self.rf_lin_vel)
-		rospy.Subscriber('/encoder_positions', Twist, self.wheel_encoders)
+		rospy.Subscriber('/can_encoder', Twist, self.wheel_encoders)
 		self.odom_pub = rospy.Publisher('/panthera_odom', Odometry, queue_size=1)
 
 		self.lb_lin = 0

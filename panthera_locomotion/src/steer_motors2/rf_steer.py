@@ -171,5 +171,6 @@ if __name__ == "__main__":
                 rate.sleep()
                 end = rospy.get_time()
                 period = end - start
+                #print(rf_steer.target)
     except rospy.ROSInterruptException:
         pass

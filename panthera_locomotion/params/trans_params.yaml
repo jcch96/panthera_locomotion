@@ -6,4 +6,4 @@ rb_sn: 'FT3X3IRP'#'FT40B64U'
 
 rf_sn: 'FT42I39N'
 
-run_mode: False
+angle_tolerance: 1.5
