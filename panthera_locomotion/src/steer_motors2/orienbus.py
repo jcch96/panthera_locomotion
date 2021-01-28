@@ -46,7 +46,7 @@ _MIN_RPM = 80
 _MAX_RPM = 4000
 
 _MIN_ACC = 150 #15s
-_MAX_ACC = 150 # 0.2s
+_MAX_ACC = 2 # 0.2s
 
 _MIN_DEC = 150 #15s
 _MAX_DEC = 2 # 0.2s

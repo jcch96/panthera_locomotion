@@ -21,8 +21,8 @@ pos_rb = 0
 pos_lf = 0
 pos_rf = 0
 
-linear_x = 0.025
-angular_z = 0.05618
+linear_x = 0.045
+angular_z = 0.02618
 
 contract_vel = 0.025
 
@@ -111,9 +111,9 @@ def enc_pos(data):
 	pos_rb = data.linear.y
 	pos_lf = data.linear.z
 	pos_rf = data.angular.x
-	#width1 = data.angular.y
-	#width2 = data.angular.z
-	#width = (width1 + width2)/2
+	width1 = data.angular.y
+	width2 = data.angular.z
+	width = (width1 + width2)/2
 
 def check():
 	req = StatusRequest()
