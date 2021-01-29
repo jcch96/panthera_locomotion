@@ -25,7 +25,7 @@ class TransMotor():
 		self.orienbus = orienbus.OrienBus(self.port)
 		self.motor = self.orienbus.initialize(self.address)
 
-		self.width = 0.68
+		self.width = 0.66
 		self.length = 1.34
 		self.wheel_radius = 0.1
 		self.gear_ratio = 100
@@ -55,7 +55,7 @@ class TransMotor():
 			self.position = data.angular.x
 			self.complement = data.linear.z
 
-		self.width = (data.angular.z + data.angular.y)/2000
+		#self.width = (data.angular.z + data.angular.y)/2000
 
 	def reconfig(self, data): ###
 		if self.name == 'lb':
@@ -202,4 +202,4 @@ class TransMotor():
 	def pub_wheel_vel(self):
 		self.wheel_velocity = self.sign*self.motor.readSpeed()#self.sign * self.rpm_to_rads(self.motor.readSpeed()) * self.wheel_radius
 		self.wheel_vel_pub.publish(self.wheel_velocity)
-		print(self.name, self.wheel_velocity, self.motor_rpm)
+		#print(self.name, self.wheel_velocity, self.motor_rpm)

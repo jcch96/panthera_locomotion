@@ -8,7 +8,7 @@ from std_msgs.msg import Empty
 from panthera_locomotion.srv import Status, StatusRequest, StatusResponse
 import serial.tools.list_ports as lp
 
-width = 0.68
+width = 0.66
 length = 1.34
 
 lb = 0
@@ -33,9 +33,9 @@ x_dist = 0
 z_dist = distance*2
 state = 66
 
-max_width = 1.0
-min_width = 0.7
-test_mode = True
+max_width = 0.5
+min_width = 0.4
+test_mode = False
 
 ct = 7
 
@@ -113,7 +113,8 @@ def enc_pos(data):
 	pos_rf = data.angular.x
 	width1 = data.angular.y
 	width2 = data.angular.z
-	width = (width1 + width2)/2
+	#width = (width1 + width2)/2
+	#print(width)
 
 def check():
 	req = StatusRequest()
@@ -337,8 +338,8 @@ def run(x):
 		# Check if wheels have adjusted before moving
 		check()
 
-		twist2.linear.x = -contract_vel
-		twist2.linear.z = -contract_vel
+		twist2.linear.x = contract_vel
+		twist2.linear.z = contract_vel
 		recon.publish(twist2)
 		
 		if test_mode == True:
@@ -370,16 +371,16 @@ def run(x):
 		# Check if wheels have adjusted before moving
 		check()
 
-		twist2.linear.y = contract_vel
-		twist2.angular.x = contract_vel
+		twist2.linear.y = -contract_vel
+		twist2.angular.x = -contract_vel
 		recon.publish(twist2)
 		
 		if test_mode == True:
 			rospy.sleep(ct) # Adjust time for expansion length
 		else:
 			while width < max_width:
-				#print("width: " + str(width))
-				print("Expanding")
+				print("width: " + str(width))
+				#print("Expanding")
 		
 		twist2.linear.y = 0
 		twist2.angular.x = 0
@@ -458,8 +459,8 @@ def run(x):
 		# Check if wheels have adjusted before moving
 		check()
 
-		twist2.linear.x = contract_vel
-		twist2.linear.z = contract_vel
+		twist2.linear.x = -contract_vel
+		twist2.linear.z = -contract_vel
 		recon.publish(twist2)
 		
 		if test_mode == True:
@@ -492,8 +493,8 @@ def run(x):
 		# Check if wheels have adjusted before moving
 		check()
 
-		twist2.linear.y = -contract_vel
-		twist2.angular.x = -contract_vel
+		twist2.linear.y = contract_vel
+		twist2.angular.x = contract_vel
 		recon.publish(twist2)
 		
 		if test_mode == True:

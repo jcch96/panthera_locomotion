@@ -15,7 +15,7 @@ class SteerMotor():
 		self.address = address
 		# Specific motor parameters
 		rospy.Subscriber('/can_encoder', Twist, self.encoder_pos)
-		rospy.Subscriber('cmd_vel', Twist, self.desired_pos)
+		rospy.Subscriber('/cmd_vel', Twist, self.desired_pos)
 		service = rospy.Service('{}_reconfig_status'.format(name), Status, self.callback)
 		serv = rospy.Service('{}_steer_status'.format(name), Status, self.steer_stat)
 
