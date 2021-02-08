@@ -333,8 +333,6 @@ def getStopLine(stopLines_middle_points, lanes):
 		stopLines.push_back(sl)
 	return stoplines 
 
-
-
 def writePoint(waypoints):
 	with open('vm/point.csv', mode='w') as point_file:
 		col_names = ['PID', 'B', 'L', 'H', 'Bx', 'Ly', 'ReF', 'MCODE1', 'MCODE2', 'MCODE3']
@@ -390,12 +388,15 @@ def writeLine(lines):
 
 
 if __name__=="__main__":
+	# Create files in folder 'vm/': point.csv, node.csv, dtlane.csv, lane.csv, stopline.csv, line.csv
+	# Waypoint file location
+	wp_file = '/home/sutd/Downloads/indoor2_wp.csv'
 
 	num_lanes = 1#24+34
 	fileNames = []
 	for i in range(0, num_lanes):
 	# 	# temp_name = 'csv/Daegu_Loop'+str(i+1)+'.csv'
-		temp_name = '/home/sutd/Downloads/indoor2_wp.csv'
+		temp_name = wp_file
 		fileNames.append(temp_name)
 
 	num_waypoints = []
@@ -407,7 +408,7 @@ if __name__=="__main__":
 		num_waypoints.append(len(temp_waypoint))
 		waypoints = waypoints + temp_waypoint
 
-	[bid, start, end] = readConnectedLaneCSV('/home/sutd/Downloads/indoor2_wp.csv')
+	[bid, start, end] = readConnectedLaneCSV(wp_file)
 	lane_info = [bid, start, end]
 
 	acc_waypoints = []
