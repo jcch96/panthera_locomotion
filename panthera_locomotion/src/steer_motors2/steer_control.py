@@ -34,7 +34,6 @@ class SteerMotor():
 
 		# Angles and erros
 		self.target = 0
-		self.target_change = 0
 		self.position = 0
 		self.complement = 0
 		self.complement_target = 0
@@ -77,6 +76,31 @@ class SteerMotor():
 		elif self.name == 'rf':
 			self.position = data.angular.x
 			self.complement = data.linear.z
+
+	'''
+	def desired_pos(self, data):
+		wz = data.angular.z
+		vx = data.linear.x
+		if wz == 0:
+			radius = float('inf')
+		else:
+			radius = vx/wz
+		left = radius - width/2
+		right = radius + width/2
+		
+		lf = round(math.degrees(math.atan((length*0.5) / left)), 2)
+		rf = round(math.degrees(math.atan((length*0.5) / right)), 2)
+		lb = -lf
+		rb = -rf
+		if self.name == "lf":
+			self.target = lf
+		elif self.name == "rb":
+			self.target = rb
+		elif self.name == "lb":
+			self.target = lb
+		elif self.name == "rf":
+			self.target = rf
+	'''
 
 	def desired_pos(self, data):
 		if self.name == 'lb':
