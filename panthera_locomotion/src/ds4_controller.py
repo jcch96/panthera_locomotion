@@ -56,6 +56,9 @@ class Ds4Controller():
 		self.holo_right = 0
 		self.holo_left = 0
 
+		self.rec_r = 0
+		self.rec_l = 0
+
 		self.d_vx = 0
 		self.d_wz = 0
 		self.decrease = 0
@@ -65,13 +68,13 @@ class Ds4Controller():
 		#### Initial VX, WZ and reconfig speed ####
 		self.vx = 0.045
 		self.wz = 0.02618
-		self.reconfig_vel = 0.05
+		self.reconfig_vel = 0.1
 
 		self.step = 0.01 # Step to adjust speed
 		###########################################
 
 		self.twist = Twist()
-
+		self.reconfiguring = Twist()
 		self.input_list = []
 
 		self.pub_once = 0
@@ -93,6 +96,9 @@ class Ds4Controller():
 		self.holo_right = data.button_r1
 		self.holo_left = data.button_l1
 
+		self.rec_r = data.button_r2
+		self.rec_l = data.button_l2
+
 		self.mode = (self.mode + data.button_options) % 2
 		#self.reconfig(not self.mode)
 
@@ -104,7 +110,7 @@ class Ds4Controller():
 
 		self.input_list = [self.forward, self.rot_right, self.rot_left, self.reverse, self.stop, 
 						   self.forward_right, self.forward_left, self.reverse_right, self.reverse_left,
-						   self.holo_right, self.holo_left, self.d_vx, self.d_wz, self.decrease, self.mode]
+						   self.holo_right, self.holo_left, self.d_vx, self.d_wz, self.decrease, self.mode, self.rec_r, self.rec_l]
 		'''
 		print("forward: " + str(self.forward))
 		print("rot_right: " + str(self.rot_right))
@@ -179,19 +185,28 @@ class Ds4Controller():
 		s = (-self.rot_right + self.rot_left - self.reverse_left/2 + self.reverse_right/2 - self.forward_right/2 + self.forward_left/2) * self.wz
 		h_r = self.holo_right * 90
 		h_l = -self.holo_left * 90
+		recon_r = self.rec_r * 90
+		recon_l = self.rec_l * 90
+		recon_move = (self.rec_r or self.rec_l) * f
 		lb,rb,lf,rf = self.adjust_wheels(f, s)
-		self.twist.linear.x = lb + h_r + h_l
-		self.twist.linear.y = rb + h_r + h_l
-		self.twist.linear.z = lf + h_r + h_l
-		self.twist.angular.x = rf + h_r + h_l
+		self.twist.linear.x = lb + h_r + h_l + recon_l
+		self.twist.linear.y = rb + h_r + h_l + recon_r
+		self.twist.linear.z = lf + h_r + h_l + recon_l
+		self.twist.angular.x = rf + h_r + h_l + recon_r
 		self.twist.angular.y = 0
 		self.twist.angular.z = 0
 		self.pub.publish(self.twist)
 
 		self.check()
 
-		self.twist.angular.y = f
-		self.twist.angular.z = s
+		self.reconfiguring.linear.x = self.rec_l * recon_move
+		self.reconfiguring.linear.y = self.rec_r * recon_move
+		self.reconfiguring.linear.z = self.rec_l * recon_move
+		self.reconfiguring.angular.x = self.rec_r * recon_move
+		self.recon.publish(self.reconfiguring)
+
+		self.twist.angular.y = f * (not self.rec_r and not self.rec_l)
+		self.twist.angular.z = s * (not self.rec_r and not self.rec_l)
 		self.pub.publish(self.twist)
 
 	def run(self):
@@ -212,10 +227,12 @@ class Ds4Controller():
 		print("[left]: Rotate Left")
 		print("[down]: Reverse" + '\n')
 
-		print("    HOLONOMIC MOVEMENT    ")
-		print("    ------------------    ")
+		print("    HOLONOMIC/RECONFIGURATION MOVEMENT    ")
+		print("    ----------------------------------    ")
 		print("[r1] + [up]: Holonomic Right")
-		print("[l1] + [up]: Holonomic Left" + '\n')
+		print("[l1] + [up]: Holonomic Left")
+		print("[r2] + [up]/[down]: Right Contract/Expand")
+		print("[l2] + [down]/[up]: Right Contract/Expand")
 
 		print("    ADJUST SPEED    ")
 		print("    ------------    ")
