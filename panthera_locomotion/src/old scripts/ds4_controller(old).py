@@ -10,14 +10,14 @@ from ds4_driver.msg import Status as st
 class Ds4Controller():
 	def __init__(self):
 		rospy.init_node('Controller')
-		self.mode = 0 # Mode 0:= reconfiguration, Mode 1:= movement steering
+
 		rospy.Subscriber('/status', st, self.ds4_sub)
-		rospy.Subscriber('/can_encoder', Twist, self.encoder_pos)
+		#rospy.Subscriber('/can_encoder', Twist, self.encoder_pos)
 
 		self.pub = rospy.Publisher('/panthera_cmd', Twist, queue_size=1)
 		self.recon = rospy.Publisher('/reconfig', Twist, queue_size=1)
 
-		
+		'''
 		rospy.wait_for_service('/lb_steer_status')
 		rospy.wait_for_service('/lf_steer_status')
 		rospy.wait_for_service('/rb_steer_status')
@@ -37,7 +37,7 @@ class Ds4Controller():
 		self.lf_stat = rospy.ServiceProxy('lf_reconfig_status', Status)
 		self.rb_stat = rospy.ServiceProxy('rb_reconfig_status', Status)
 		self.rf_stat = rospy.ServiceProxy('rf_reconfig_status', Status)
-		
+		'''
 		self.width = 0.6
 		self.length = 1.31
 
@@ -60,7 +60,7 @@ class Ds4Controller():
 		self.d_wz = 0
 		self.decrease = 0
 
-		#self.mode = 1 # Mode 0:= reconfiguration, Mode 1:= movement steering
+		self.mode = 1 # Mode 0:= reconfiguration, Mode 1:= movement steering
 
 		#### Initial VX, WZ and reconfig speed ####
 		self.vx = 0.045
@@ -72,9 +72,7 @@ class Ds4Controller():
 
 		self.twist = Twist()
 
-		self.input_list = []
-
-		self.pub_once = 0
+		#self.run()
 
 	def encoder_pos(self,data):
 		self.width = (data.angular.y + data.angular.z)/2
@@ -85,10 +83,10 @@ class Ds4Controller():
 		self.rot_left = data.button_dpad_left * (not (data.button_dpad_up or data.button_dpad_down))
 		self.reverse = data.button_dpad_down * (not (data.button_dpad_right or data.button_dpad_left))
 
-		self.forward_right = (data.button_dpad_up and data.button_dpad_right) * 2
-		self.forward_left = (data.button_dpad_up and data.button_dpad_left) * 2
-		self.reverse_right = (data.button_dpad_down and data.button_dpad_right) * 2
-		self.reverse_left = (data.button_dpad_down and  data.button_dpad_left) * 2
+		self.forward_right = data.button_dpad_up and data.button_dpad_right
+		self.forward_left = data.button_dpad_up and data.button_dpad_left
+		self.reverse_right = data.button_dpad_down and data.button_dpad_right
+		self.reverse_left = data.button_dpad_down and  data.button_dpad_left
 
 		self.holo_right = data.button_r1
 		self.holo_left = data.button_l1
@@ -101,10 +99,6 @@ class Ds4Controller():
 		self.decrease = -data.button_share
 
 		self.stop = data.button_square
-
-		self.input_list = [self.forward, self.rot_right, self.rot_left, self.reverse, self.stop, 
-						   self.forward_right, self.forward_left, self.reverse_right, self.reverse_left,
-						   self.holo_right, self.holo_left, self.d_vx, self.d_wz, self.decrease, self.mode]
 		'''
 		print("forward: " + str(self.forward))
 		print("rot_right: " + str(self.rot_right))
@@ -175,8 +169,8 @@ class Ds4Controller():
 	def locomotion(self):
 		self.change_wz()
 		self.change_vx()
-		f = (self.forward - self.reverse - self.reverse_left/2 - self.reverse_right/2 + self.forward_right/2 + self.forward_left/2) * self.vx
-		s = (-self.rot_right + self.rot_left - self.reverse_left/2 + self.reverse_right/2 - self.forward_right/2 + self.forward_left/2) * self.wz
+		f = (self.forward - self.reverse - self.reverse_left - self.reverse_right + self.forward_right + self.forward_left) * self.vx
+		s = (-self.rot_right + self.rot_left - self.reverse_left + self.reverse_right - self.forward_right + self.forward_left) * self.wz
 		h_r = self.holo_right * 90
 		h_l = -self.holo_left * 90
 		lb,rb,lf,rf = self.adjust_wheels(f, s)
@@ -188,20 +182,21 @@ class Ds4Controller():
 		self.twist.angular.z = 0
 		self.pub.publish(self.twist)
 
-		self.check()
+		#self.check()
 
 		self.twist.angular.y = f
 		self.twist.angular.z = s
 		self.pub.publish(self.twist)
+		#print(self.twist)
+		#print('VX: ' + str(self.vx))
+		#print('WZ: ' + str(self.wz))
 
 	def run(self):
-		if sum(self.input_list) != self.pub_once:
-			self.pub_once = sum(self.input_list)
+		rate = rospy.Rate(10)
+		while not rospy.is_shutdown():
 			self.locomotion()
 			self.print_instructions()
-		else:
-			self.pub_once = sum(self.input_list)
-		#print(sum(self.input_list), self.mode)
+			rate.sleep()
 
 	def print_instructions(self):
 		print('\n')
@@ -229,14 +224,9 @@ class Ds4Controller():
 		print("VX: " + str(self.vx))
 		print("WZ: " + str(self.wz))
 		print("Turning Radius: " + str(round(self.vx/self.wz,2)))
-		print("Robot Width: " + str(self.width))
-		print("Mode (0->reconfig , 1->smooth): " + str(self.mode))
 
 if __name__ == "__main__":
 	start = Ds4Controller()
-	rate = rospy.Rate(5)
-	start.print_instructions()
+	#start.print_instructions()
 	while not rospy.is_shutdown():
-		#start.print_instructions()
 		start.run()
-		rate.sleep()
