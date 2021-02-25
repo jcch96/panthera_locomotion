@@ -200,7 +200,7 @@ int main(int argc, char **argv)
                 uint b = can_array[i].data[1];
                 uint position = (b << 8) | (a);
                 double positionFloat = position;
-                positionFloat = (positionFloat / 40.96 + 325)/1000;
+                positionFloat = (positionFloat / 40.96 + 325)/1000 + 0.032;
                 //std::cout << positionFloat << "\n";
                 msg.angular.y = positionFloat;
             }
@@ -210,7 +210,7 @@ int main(int argc, char **argv)
                 uint b = can_array[i].data[1];
                 uint position = (b << 8) | (a);
                 double positionFloat = position;
-                positionFloat = (positionFloat / 40.96 + 330)/1000;
+                positionFloat = (positionFloat / 40.96 + 330)/1000 + 0.032;
                 //std::cout << positionFloat << "\n";
                 msg.angular.z = positionFloat;
             }
@@ -226,7 +226,7 @@ int main(int argc, char **argv)
                 uint d = can_array[i].data[3];
                 uint position = (d << 24) | (c << 16) | (b << 8) | (a);
                 double positionFloat = position;
-                positionFloat = (positionFloat - 67063944) * 0.02197; //67063944
+                positionFloat = ((positionFloat - 67063944) * 0.02197) + 87.5; //67063944
                 /**std::cout << positionFloat << "\n";**/
                 msg.linear.x = positionFloat;
             }
@@ -239,7 +239,7 @@ int main(int argc, char **argv)
                 uint d = can_array[i].data[3];
                 uint position = (d << 24) | (c << 16) | (b << 8) | (a);
                 double positionFloat = position;
-                positionFloat = (positionFloat - 137458) * 0.02197;
+                positionFloat = ((positionFloat - 137458) * 0.02197) - 1484.5;
                 /**std::cout << positionFloat << "\n";**/
                 msg.linear.y = positionFloat;
             }
@@ -252,7 +252,7 @@ int main(int argc, char **argv)
                 uint d = can_array[i].data[3];
                 uint position = (d << 24) | (c << 16) | (b << 8) | (a);
                 double positionFloat = position;
-                positionFloat = (positionFloat - 241754) * 0.02197;
+                positionFloat = ((positionFloat - 241754) * 0.02197) - 32.0;
                 /**std::cout << positionFloat << "\n";**/
                 msg.linear.z = positionFloat;
             }
@@ -265,7 +265,7 @@ int main(int argc, char **argv)
                 uint d = can_array[i].data[3];
                 uint position = (d << 24) | (c << 16) | (b << 8) | (a);
                 double positionFloat = position;
-                positionFloat = (positionFloat - 13977) * 0.02197;
+                positionFloat = ((positionFloat - 13977) * 0.02197) - 3.0;
                 /**std::cout << positionFloat << "\n";**/
                 msg.angular.x = positionFloat;
             }
