@@ -11,7 +11,7 @@ class TransMotor():
 
 	def __init__(self, name, address, sign):
 		#rospy.init_node('rf_trans_motor')
-		rospy.Subscriber('/cmd_vel', Twist, self.callback)
+		rospy.Subscriber('/panthera_cmd', Twist, self.callback)
 		rospy.Subscriber('/reconfig', Twist, self.reconfig)
 		rospy.Subscriber('/can_encoder', Twist, self.encoder_position) # CHANGE THE TOPIC NAME
 		self.wheel_vel_pub = rospy.Publisher('/{}_wheel_vel'.format(name), Float32, queue_size=1)
@@ -55,7 +55,7 @@ class TransMotor():
 			self.position = data.angular.x
 			self.complement = data.linear.z
 
-		#self.width = (data.angular.z + data.angular.y)/2000
+		self.width = (data.angular.z + data.angular.y)/2
 
 	def reconfig(self, data): ###
 		if self.name == 'lb':
