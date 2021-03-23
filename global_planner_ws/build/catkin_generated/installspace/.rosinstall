@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/sutd/global_planner_ws/install/setup.sh

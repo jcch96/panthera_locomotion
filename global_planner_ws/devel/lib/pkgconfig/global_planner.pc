@@ -1,0 +1,8 @@
+prefix=/home/sutd/global_planner_ws/devel
+
+Name: global_planner
+Description: Description of global_planner
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

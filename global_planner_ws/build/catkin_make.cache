@@ -1,0 +1,2 @@
+global_planner
+-DCATKIN_DEVEL_PREFIX=/home/sutd/global_planner_ws/devel -DCMAKE_INSTALL_PREFIX=/home/sutd/global_planner_ws/install -G Unix Makefiles
