@@ -13,8 +13,6 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   grid_map_msgs
-  tf2
-  tf
 )
 
 ## System dependencies are found with CMake's conventions

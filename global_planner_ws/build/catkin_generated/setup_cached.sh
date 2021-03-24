@@ -7,4 +7,8 @@
 # new environment variables
 
 # modified environment variables
-export PWD='/home/sutd/global_planner_ws/build'
+export CMAKE_PREFIX_PATH="/home/joel/global_planner_ws/devel:$CMAKE_PREFIX_PATH"
+export PATH='/opt/ros/melodic/bin:/home/joel/miniconda3/condabin:/usr/local/cuda-10.1/bin:/home/joel/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'
+export PWD='/home/joel/global_planner_ws/build'
+export ROSLISP_PACKAGE_DIRECTORIES="/home/joel/global_planner_ws/devel/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
+export ROS_PACKAGE_PATH="/home/joel/global_planner_ws/src:$ROS_PACKAGE_PATH"

@@ -1,8 +1,8 @@
-# Install script for directory: /home/sutd/global_planner_ws/src/global_planner
+# Install script for directory: /home/joel/global_planner_ws/src/global_planner
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/sutd/global_planner_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/joel/global_planner_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -37,23 +37,18 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
-# Set default install directory permissions.
-if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "/usr/bin/objdump")
-endif()
-
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/sutd/global_planner_ws/build/global_planner/catkin_generated/installspace/global_planner.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/joel/global_planner_ws/build/global_planner/catkin_generated/installspace/global_planner.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/global_planner/cmake" TYPE FILE FILES
-    "/home/sutd/global_planner_ws/build/global_planner/catkin_generated/installspace/global_plannerConfig.cmake"
-    "/home/sutd/global_planner_ws/build/global_planner/catkin_generated/installspace/global_plannerConfig-version.cmake"
+    "/home/joel/global_planner_ws/build/global_planner/catkin_generated/installspace/global_plannerConfig.cmake"
+    "/home/joel/global_planner_ws/build/global_planner/catkin_generated/installspace/global_plannerConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/global_planner" TYPE FILE FILES "/home/sutd/global_planner_ws/src/global_planner/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/global_planner" TYPE FILE FILES "/home/joel/global_planner_ws/src/global_planner/package.xml")
 endif()
 

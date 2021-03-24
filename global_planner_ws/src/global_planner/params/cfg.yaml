@@ -1,0 +1,3 @@
+costmap_topic: "/map"
+length: 1.4
+width: 1.0
