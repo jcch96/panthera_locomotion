@@ -9,11 +9,11 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <geometry_msgs/Pose.h>
 #include <tf/tf.h>
+#include <global_planner/CmapClear.h>
 
 /** PARAMS:
 	- length of robot
 	- width of robot
-	- costmap_topic
 **/
 
 class Robot
@@ -22,16 +22,10 @@ class Robot
 		ros::Subscriber CostMap;
 		ros::Subscriber RobotPose;
 		ros::Publisher CmdVelPub;
-
-		std::string costmap_topic;
-
-		int curr_state, prev_state;
-
-		geometry_msgs:: Twist cmd;
+		ros::Publisher cmap_clear;
 
 		// Footprint info
 		float length, width;
-		//float front_left, front_right, back_left, back_right;
 
 		float safety_dist = 0.5;
 		int buffer; // number of squares safety distance
@@ -41,21 +35,15 @@ class Robot
 		int left_bound_x, right_bound_x;
 		std::array<int,2> vert_bound, forward_bound_x;
 
-		// robot speeds
-		double vx=0.1, vy=0.1, wz=0.5;
-
 	public:
 		Robot(ros::NodeHandle *nh)
 		{	
-			costmap_topic = nh->getParam("/costmap_topic", costmap_topic);
-			CostMap = nh->subscribe(costmap_topic, 1000, &Robot::mapCallback, this);
+			CostMap = nh->subscribe("/map", 1000, &Robot::mapCallback, this);
 			CmdVelPub = nh->advertise<geometry_msgs::Twist>("panthera_cmd",100);
+			cmap_clear = nh->advertise<global_planner::CmapClear>("check_cmap",100);
+
 			length = nh->getParam("/robot_length", length);
 			width = nh->getParam("/robot_width", width);
-			//front_left = nh->getParam("/footprint/front_left", front_left);
-			//front_right = nh->getParam("/footprint/front_right", front_right);
-			//back_left = nh->getParam("/footprint/back_left", back_left);
-			//back_right = nh->getParam("/footprint/back_right", back_right);
 		}
 
 		void mapCallback(const nav_msgs::OccupancyGrid& msg)
@@ -77,54 +65,7 @@ class Robot
 				}
 			}
 
-			bool isClear;
-			if (curr_state == 1)
-			{
-				isClear = checkclear(curr_state, map_mat);
-			}
-			else if (curr_state == 2)
-			{
-				isClear = checkclear(curr_state, map_mat);
-			}
-			else if (curr_state == 3)
-			{
-				isClear = checkclear(curr_state, map_mat);
-			}
-
-			if (isClear == false)
-			{
-				stop();
-				ros::Duration(2).sleep();
-				if (curr_state == 1)
-				{
-					prev_state = curr_state;
-					curr_state = 2;
-					up();
-				}
-
-				else if (curr_state == 3)
-				{
-					prev_state = curr_state;
-					curr_state = 2;
-					up();
-				}
-
-				else if (curr_state == 2)
-				{
-					if (prev_state == 1)
-					{
-						prev_state = curr_state;
-						curr_state = 3;
-						left();
-					}
-					else if (prev_state == 3)
-					{
-						prev_state = curr_state;
-						curr_state = 1;
-						right();
-					}
-				}
-			}
+			checkclear(map_mat);
 
 		}
 
@@ -149,94 +90,65 @@ class Robot
 			buffer = (int)ceil(safety_dist/res);
 		}
 		
-		bool checkclear(int state, double** costmap)
-		{
-			// moving right
-			if(state == 1)
-			{
-				for (int i = right_bound_x; i <= right_bound_x + buffer; i++)
+		void checkclear(double** costmap)
+		{	
+			bool left_clear=true, right_clear=true, up_clear=true;
+			// right clear
+			for (int i = right_bound_x; i <= right_bound_x + buffer; i++)
+			{	
+				if (right_clear == false)
 				{
-					for (int j = vert_bound[0] - buffer; j <= vert_bound[1] + buffer; j++)
+					break;
+				}
+				for (int j = vert_bound[0] - buffer; j <= vert_bound[1] + buffer; j++)
+				{
+					if (costmap[i][j] > 0)
 					{
-						if (costmap[i][j] > 0)
-						{
-							return false;
-						}
+						right_clear = false;
+						break;
 					}
 				}
 			}
 
-			// moving up
-			else if(state == 2)
-			{
-				for (int i = left_bound_x - buffer; i <= right_bound_x + buffer; i++)
+			// up clear
+			for (int i = left_bound_x - buffer; i <= right_bound_x + buffer; i++)
+			{	
+				if (up_clear == false)
 				{
-					for (int j = vert_bound[1]; j <= vert_bound[1] + buffer; j++)
+					break;
+				}
+				for (int j = vert_bound[1]; j <= vert_bound[1] + buffer; j++)
+				{
+					if (costmap[i][j] > 0)
 					{
-						if (costmap[i][j] > 0)
-						{
-							return false;
-						}
+						up_clear = false;
 					}
 				}
 			}
 
-			// moving left
-			else if(state == 3)
-			{
-				for (int i = left_bound_x; i >= left_bound_x + buffer; i--)
+			// left clear
+			for (int i = left_bound_x; i >= left_bound_x + buffer; i--)
+			{	
+				if (left_clear == false)
 				{
-					for (int j = vert_bound[1]; j <= vert_bound[1] + buffer; j++)
+					break;
+				}
+				for (int j = vert_bound[1]; j <= vert_bound[1] + buffer; j++)
+				{
+					if (costmap[i][j] > 0)
 					{
-						if (costmap[i][j] > 0)
-						{
-							return false;
-						}
+						left_clear = false;
+						break;
 					}
 				}
 			}
-
-			return true;
+			global_planner::CmapClear bools;
+			bools.right = right_clear;
+			bools.left = left_clear;
+			bools.up = up_clear;
+			cmap_clear.publish(bools);
+			
 		}
-
-		// Twist commands
-		void stop()
-		{
-			geometry_msgs::Twist* ts = &cmd;
-			ts->linear.x = 0;
-			ts->linear.y = 0;
-			ts->angular.z = 0;
-			CmdVelPub.publish(*ts);
-		}
-
-		void right()
-		{
-			geometry_msgs::Twist* ts = &cmd;
-			ts->linear.x = 0;
-			ts->linear.y = -vy;
-			ts->angular.z = 0;
-			CmdVelPub.publish(*ts);
-		}
-
-		void up()
-		{
-			geometry_msgs::Twist* ts = &cmd;
-			ts->linear.x = vx;
-			ts->linear.y = 0;
-			ts->angular.z = 0;
-			CmdVelPub.publish(*ts);
-		}
-
-		void left()
-		{
-			geometry_msgs::Twist* ts = &cmd;
-			ts->linear.x = 0;
-			ts->linear.y = vy;
-			ts->angular.z = 0;
-			CmdVelPub.publish(*ts);
-		}
-
-
 };
 
 int main(int argc, char **argv)

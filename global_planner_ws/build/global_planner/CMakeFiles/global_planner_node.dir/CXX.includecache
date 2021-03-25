@@ -6,6 +6,22 @@
 
 #IncludeRegexTransform: 
 
+/home/joel/global_planner_ws/devel/include/global_planner/CmapClear.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+
 /home/joel/global_planner_ws/src/global_planner/src/g_plan.cpp
 ros/ros.h
 -
@@ -28,6 +44,8 @@ tf2/LinearMath/Quaternion.h
 geometry_msgs/Pose.h
 -
 tf/tf.h
+-
+global_planner/CmapClear.h
 -
 
 /opt/ros/melodic/include/geometry_msgs/Point.h

@@ -68,18 +68,6 @@ install/strip/fast: preinstall/fast
 	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
-
 # Special rule for the target list_install_components
 list_install_components:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
@@ -100,6 +88,18 @@ test:
 test/fast: test
 
 .PHONY : test/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
 
 # Special rule for the target install
 install: preinstall
@@ -168,6 +168,126 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+global_planner/CMakeFiles/twist_pub_node.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/twist_pub_node.dir/rule
+.PHONY : global_planner/CMakeFiles/twist_pub_node.dir/rule
+
+# Convenience name for target.
+twist_pub_node: global_planner/CMakeFiles/twist_pub_node.dir/rule
+
+.PHONY : twist_pub_node
+
+# fast build rule for target.
+twist_pub_node/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/twist_pub_node.dir/build.make global_planner/CMakeFiles/twist_pub_node.dir/build
+.PHONY : twist_pub_node/fast
+
+# Convenience name for target.
+global_planner/CMakeFiles/global_planner_genpy.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/global_planner_genpy.dir/rule
+.PHONY : global_planner/CMakeFiles/global_planner_genpy.dir/rule
+
+# Convenience name for target.
+global_planner_genpy: global_planner/CMakeFiles/global_planner_genpy.dir/rule
+
+.PHONY : global_planner_genpy
+
+# fast build rule for target.
+global_planner_genpy/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/global_planner_genpy.dir/build.make global_planner/CMakeFiles/global_planner_genpy.dir/build
+.PHONY : global_planner_genpy/fast
+
+# Convenience name for target.
+global_planner/CMakeFiles/global_planner_gennodejs.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/global_planner_gennodejs.dir/rule
+.PHONY : global_planner/CMakeFiles/global_planner_gennodejs.dir/rule
+
+# Convenience name for target.
+global_planner_gennodejs: global_planner/CMakeFiles/global_planner_gennodejs.dir/rule
+
+.PHONY : global_planner_gennodejs
+
+# fast build rule for target.
+global_planner_gennodejs/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/global_planner_gennodejs.dir/build.make global_planner/CMakeFiles/global_planner_gennodejs.dir/build
+.PHONY : global_planner_gennodejs/fast
+
+# Convenience name for target.
+global_planner/CMakeFiles/global_planner_node.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/global_planner_node.dir/rule
+.PHONY : global_planner/CMakeFiles/global_planner_node.dir/rule
+
+# Convenience name for target.
+global_planner_node: global_planner/CMakeFiles/global_planner_node.dir/rule
+
+.PHONY : global_planner_node
+
+# fast build rule for target.
+global_planner_node/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/global_planner_node.dir/build.make global_planner/CMakeFiles/global_planner_node.dir/build
+.PHONY : global_planner_node/fast
+
+# Convenience name for target.
+global_planner/CMakeFiles/global_planner_generate_messages_nodejs.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/global_planner_generate_messages_nodejs.dir/rule
+.PHONY : global_planner/CMakeFiles/global_planner_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+global_planner_generate_messages_nodejs: global_planner/CMakeFiles/global_planner_generate_messages_nodejs.dir/rule
+
+.PHONY : global_planner_generate_messages_nodejs
+
+# fast build rule for target.
+global_planner_generate_messages_nodejs/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/global_planner_generate_messages_nodejs.dir/build.make global_planner/CMakeFiles/global_planner_generate_messages_nodejs.dir/build
+.PHONY : global_planner_generate_messages_nodejs/fast
+
+# Convenience name for target.
+global_planner/CMakeFiles/global_planner_generate_messages_py.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/global_planner_generate_messages_py.dir/rule
+.PHONY : global_planner/CMakeFiles/global_planner_generate_messages_py.dir/rule
+
+# Convenience name for target.
+global_planner_generate_messages_py: global_planner/CMakeFiles/global_planner_generate_messages_py.dir/rule
+
+.PHONY : global_planner_generate_messages_py
+
+# fast build rule for target.
+global_planner_generate_messages_py/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/global_planner_generate_messages_py.dir/build.make global_planner/CMakeFiles/global_planner_generate_messages_py.dir/build
+.PHONY : global_planner_generate_messages_py/fast
+
+# Convenience name for target.
+global_planner/CMakeFiles/global_planner_genlisp.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/global_planner_genlisp.dir/rule
+.PHONY : global_planner/CMakeFiles/global_planner_genlisp.dir/rule
+
+# Convenience name for target.
+global_planner_genlisp: global_planner/CMakeFiles/global_planner_genlisp.dir/rule
+
+.PHONY : global_planner_genlisp
+
+# fast build rule for target.
+global_planner_genlisp/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/global_planner_genlisp.dir/build.make global_planner/CMakeFiles/global_planner_genlisp.dir/build
+.PHONY : global_planner_genlisp/fast
+
+# Convenience name for target.
+global_planner/CMakeFiles/global_planner_gencpp.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/global_planner_gencpp.dir/rule
+.PHONY : global_planner/CMakeFiles/global_planner_gencpp.dir/rule
+
+# Convenience name for target.
+global_planner_gencpp: global_planner/CMakeFiles/global_planner_gencpp.dir/rule
+
+.PHONY : global_planner_gencpp
+
+# fast build rule for target.
+global_planner_gencpp/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/global_planner_gencpp.dir/build.make global_planner/CMakeFiles/global_planner_gencpp.dir/build
+.PHONY : global_planner_gencpp/fast
+
+# Convenience name for target.
 global_planner/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule:
 	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
 .PHONY : global_planner/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
@@ -211,21 +331,6 @@ std_msgs_generate_messages_py: global_planner/CMakeFiles/std_msgs_generate_messa
 std_msgs_generate_messages_py/fast:
 	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/std_msgs_generate_messages_py.dir/build.make global_planner/CMakeFiles/std_msgs_generate_messages_py.dir/build
 .PHONY : std_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-global_planner/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule
-.PHONY : global_planner/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-nav_msgs_generate_messages_nodejs: global_planner/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : nav_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-nav_msgs_generate_messages_nodejs/fast:
-	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/build.make global_planner/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/build
-.PHONY : nav_msgs_generate_messages_nodejs/fast
 
 # Convenience name for target.
 global_planner/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule:
@@ -393,6 +498,21 @@ rosgraph_msgs_generate_messages_py/fast:
 .PHONY : rosgraph_msgs_generate_messages_py/fast
 
 # Convenience name for target.
+global_planner/CMakeFiles/_global_planner_generate_messages_check_deps_CmapClear.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/_global_planner_generate_messages_check_deps_CmapClear.dir/rule
+.PHONY : global_planner/CMakeFiles/_global_planner_generate_messages_check_deps_CmapClear.dir/rule
+
+# Convenience name for target.
+_global_planner_generate_messages_check_deps_CmapClear: global_planner/CMakeFiles/_global_planner_generate_messages_check_deps_CmapClear.dir/rule
+
+.PHONY : _global_planner_generate_messages_check_deps_CmapClear
+
+# fast build rule for target.
+_global_planner_generate_messages_check_deps_CmapClear/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/_global_planner_generate_messages_check_deps_CmapClear.dir/build.make global_planner/CMakeFiles/_global_planner_generate_messages_check_deps_CmapClear.dir/build
+.PHONY : _global_planner_generate_messages_check_deps_CmapClear/fast
+
+# Convenience name for target.
 global_planner/CMakeFiles/nav_msgs_generate_messages_cpp.dir/rule:
 	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/nav_msgs_generate_messages_cpp.dir/rule
 .PHONY : global_planner/CMakeFiles/nav_msgs_generate_messages_cpp.dir/rule
@@ -408,19 +528,49 @@ nav_msgs_generate_messages_cpp/fast:
 .PHONY : nav_msgs_generate_messages_cpp/fast
 
 # Convenience name for target.
-global_planner/CMakeFiles/global_planner_node.dir/rule:
-	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/global_planner_node.dir/rule
-.PHONY : global_planner/CMakeFiles/global_planner_node.dir/rule
+global_planner/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule
+.PHONY : global_planner/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule
 
 # Convenience name for target.
-global_planner_node: global_planner/CMakeFiles/global_planner_node.dir/rule
+nav_msgs_generate_messages_nodejs: global_planner/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule
 
-.PHONY : global_planner_node
+.PHONY : nav_msgs_generate_messages_nodejs
 
 # fast build rule for target.
-global_planner_node/fast:
-	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/global_planner_node.dir/build.make global_planner/CMakeFiles/global_planner_node.dir/build
-.PHONY : global_planner_node/fast
+nav_msgs_generate_messages_nodejs/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/build.make global_planner/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/build
+.PHONY : nav_msgs_generate_messages_nodejs/fast
+
+# Convenience name for target.
+global_planner/CMakeFiles/global_planner_generate_messages.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/global_planner_generate_messages.dir/rule
+.PHONY : global_planner/CMakeFiles/global_planner_generate_messages.dir/rule
+
+# Convenience name for target.
+global_planner_generate_messages: global_planner/CMakeFiles/global_planner_generate_messages.dir/rule
+
+.PHONY : global_planner_generate_messages
+
+# fast build rule for target.
+global_planner_generate_messages/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/global_planner_generate_messages.dir/build.make global_planner/CMakeFiles/global_planner_generate_messages.dir/build
+.PHONY : global_planner_generate_messages/fast
+
+# Convenience name for target.
+global_planner/CMakeFiles/global_planner_geneus.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/global_planner_geneus.dir/rule
+.PHONY : global_planner/CMakeFiles/global_planner_geneus.dir/rule
+
+# Convenience name for target.
+global_planner_geneus: global_planner/CMakeFiles/global_planner_geneus.dir/rule
+
+.PHONY : global_planner_geneus
+
+# fast build rule for target.
+global_planner_geneus/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/global_planner_geneus.dir/build.make global_planner/CMakeFiles/global_planner_geneus.dir/build
+.PHONY : global_planner_geneus/fast
 
 # Convenience name for target.
 global_planner/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule:
@@ -483,6 +633,21 @@ actionlib_msgs_generate_messages_eus/fast:
 .PHONY : actionlib_msgs_generate_messages_eus/fast
 
 # Convenience name for target.
+global_planner/CMakeFiles/global_planner_generate_messages_eus.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/global_planner_generate_messages_eus.dir/rule
+.PHONY : global_planner/CMakeFiles/global_planner_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+global_planner_generate_messages_eus: global_planner/CMakeFiles/global_planner_generate_messages_eus.dir/rule
+
+.PHONY : global_planner_generate_messages_eus
+
+# fast build rule for target.
+global_planner_generate_messages_eus/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/global_planner_generate_messages_eus.dir/build.make global_planner/CMakeFiles/global_planner_generate_messages_eus.dir/build
+.PHONY : global_planner_generate_messages_eus/fast
+
+# Convenience name for target.
 global_planner/CMakeFiles/grid_map_msgs_generate_messages_lisp.dir/rule:
 	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/grid_map_msgs_generate_messages_lisp.dir/rule
 .PHONY : global_planner/CMakeFiles/grid_map_msgs_generate_messages_lisp.dir/rule
@@ -511,6 +676,21 @@ actionlib_msgs_generate_messages_lisp: global_planner/CMakeFiles/actionlib_msgs_
 actionlib_msgs_generate_messages_lisp/fast:
 	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/build.make global_planner/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/build
 .PHONY : actionlib_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
+global_planner/CMakeFiles/global_planner_generate_messages_cpp.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/global_planner_generate_messages_cpp.dir/rule
+.PHONY : global_planner/CMakeFiles/global_planner_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+global_planner_generate_messages_cpp: global_planner/CMakeFiles/global_planner_generate_messages_cpp.dir/rule
+
+.PHONY : global_planner_generate_messages_cpp
+
+# fast build rule for target.
+global_planner_generate_messages_cpp/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/global_planner_generate_messages_cpp.dir/build.make global_planner/CMakeFiles/global_planner_generate_messages_cpp.dir/build
+.PHONY : global_planner_generate_messages_cpp/fast
 
 # Convenience name for target.
 global_planner/CMakeFiles/actionlib_msgs_generate_messages_py.dir/rule:
@@ -663,6 +843,21 @@ grid_map_msgs_generate_messages_eus/fast:
 .PHONY : grid_map_msgs_generate_messages_eus/fast
 
 # Convenience name for target.
+global_planner/CMakeFiles/global_planner_generate_messages_lisp.dir/rule:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/global_planner_generate_messages_lisp.dir/rule
+.PHONY : global_planner/CMakeFiles/global_planner_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+global_planner_generate_messages_lisp: global_planner/CMakeFiles/global_planner_generate_messages_lisp.dir/rule
+
+.PHONY : global_planner_generate_messages_lisp
+
+# fast build rule for target.
+global_planner_generate_messages_lisp/fast:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/global_planner_generate_messages_lisp.dir/build.make global_planner/CMakeFiles/global_planner_generate_messages_lisp.dir/build
+.PHONY : global_planner_generate_messages_lisp/fast
+
+# Convenience name for target.
 global_planner/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule:
 	cd /home/joel/global_planner_ws/build && $(MAKE) -f CMakeFiles/Makefile2 global_planner/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule
 .PHONY : global_planner/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule
@@ -734,6 +929,33 @@ src/g_plan.cpp.s:
 	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/global_planner_node.dir/build.make global_planner/CMakeFiles/global_planner_node.dir/src/g_plan.cpp.s
 .PHONY : src/g_plan.cpp.s
 
+src/twist_pub_node.o: src/twist_pub_node.cpp.o
+
+.PHONY : src/twist_pub_node.o
+
+# target to build an object file
+src/twist_pub_node.cpp.o:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/twist_pub_node.dir/build.make global_planner/CMakeFiles/twist_pub_node.dir/src/twist_pub_node.cpp.o
+.PHONY : src/twist_pub_node.cpp.o
+
+src/twist_pub_node.i: src/twist_pub_node.cpp.i
+
+.PHONY : src/twist_pub_node.i
+
+# target to preprocess a source file
+src/twist_pub_node.cpp.i:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/twist_pub_node.dir/build.make global_planner/CMakeFiles/twist_pub_node.dir/src/twist_pub_node.cpp.i
+.PHONY : src/twist_pub_node.cpp.i
+
+src/twist_pub_node.s: src/twist_pub_node.cpp.s
+
+.PHONY : src/twist_pub_node.s
+
+# target to generate assembly for a file
+src/twist_pub_node.cpp.s:
+	cd /home/joel/global_planner_ws/build && $(MAKE) -f global_planner/CMakeFiles/twist_pub_node.dir/build.make global_planner/CMakeFiles/twist_pub_node.dir/src/twist_pub_node.cpp.s
+.PHONY : src/twist_pub_node.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -741,14 +963,21 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... install/strip"
-	@echo "... install/local"
 	@echo "... list_install_components"
 	@echo "... test"
+	@echo "... twist_pub_node"
+	@echo "... global_planner_genpy"
+	@echo "... global_planner_gennodejs"
+	@echo "... global_planner_node"
+	@echo "... global_planner_generate_messages_nodejs"
+	@echo "... install/local"
+	@echo "... global_planner_generate_messages_py"
+	@echo "... global_planner_genlisp"
+	@echo "... global_planner_gencpp"
 	@echo "... rosgraph_msgs_generate_messages_eus"
 	@echo "... install"
 	@echo "... nav_msgs_generate_messages_py"
 	@echo "... std_msgs_generate_messages_py"
-	@echo "... nav_msgs_generate_messages_nodejs"
 	@echo "... std_msgs_generate_messages_cpp"
 	@echo "... nav_msgs_generate_messages_eus"
 	@echo "... edit_cache"
@@ -761,14 +990,19 @@ help:
 	@echo "... actionlib_msgs_generate_messages_nodejs"
 	@echo "... rosgraph_msgs_generate_messages_nodejs"
 	@echo "... rosgraph_msgs_generate_messages_py"
+	@echo "... _global_planner_generate_messages_check_deps_CmapClear"
 	@echo "... nav_msgs_generate_messages_cpp"
-	@echo "... global_planner_node"
+	@echo "... nav_msgs_generate_messages_nodejs"
+	@echo "... global_planner_generate_messages"
+	@echo "... global_planner_geneus"
 	@echo "... geometry_msgs_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_lisp"
 	@echo "... geometry_msgs_generate_messages_py"
 	@echo "... actionlib_msgs_generate_messages_eus"
+	@echo "... global_planner_generate_messages_eus"
 	@echo "... grid_map_msgs_generate_messages_lisp"
 	@echo "... actionlib_msgs_generate_messages_lisp"
+	@echo "... global_planner_generate_messages_cpp"
 	@echo "... actionlib_msgs_generate_messages_py"
 	@echo "... rebuild_cache"
 	@echo "... roscpp_generate_messages_cpp"
@@ -780,12 +1014,16 @@ help:
 	@echo "... grid_map_msgs_generate_messages_cpp"
 	@echo "... roscpp_generate_messages_py"
 	@echo "... grid_map_msgs_generate_messages_eus"
+	@echo "... global_planner_generate_messages_lisp"
 	@echo "... actionlib_msgs_generate_messages_cpp"
 	@echo "... grid_map_msgs_generate_messages_nodejs"
 	@echo "... grid_map_msgs_generate_messages_py"
 	@echo "... src/g_plan.o"
 	@echo "... src/g_plan.i"
 	@echo "... src/g_plan.s"
+	@echo "... src/twist_pub_node.o"
+	@echo "... src/twist_pub_node.i"
+	@echo "... src/twist_pub_node.s"
 .PHONY : help
 
 
