@@ -47,15 +47,7 @@ public:
 		{
 			finished_step = true;
 		}
-	}
-
-	void cmap_check(const global_planner::CmapClear& msg)
-	{
-		right_clear = msg.right;
-		left_clear = msg.left;
-		up_clear = msg.up;
-
-		sm();
+		sm(curr_x, curr_y);
 
 		switch(curr_state)
 		{
@@ -68,7 +60,14 @@ public:
 		}
 	}
 
-	void sm()
+	void cmap_check(const global_planner::CmapClear& msg)
+	{
+		right_clear = msg.right;
+		left_clear = msg.left;
+		up_clear = msg.up;
+	}
+
+	void sm(double x, double y)
 	{
 		switch(curr_state)
 		{	
@@ -86,6 +85,8 @@ public:
 								stop();
 								prev_state = curr_state;
 								curr_state = 2;
+								start_x = x;
+								start_y = y;
 						}
 					// from moving left
 					case 3:
@@ -94,6 +95,8 @@ public:
 							case true:
 								prev_state = curr_state;
 								curr_state = 2;
+								start_x = x;
+								start_y = y;
 							case false:
 								break;
 						}
@@ -149,6 +152,8 @@ public:
 								stop();
 								prev_state = curr_state;
 								curr_state = 2;
+								start_x = x;
+								start_y = y;
 						}
 					// from moving right
 					case 1:
@@ -158,6 +163,8 @@ public:
 								stop();
 								prev_state = curr_state;
 								curr_state = 2;
+								start_x = x;
+								start_y = y;
 							case false:
 								break;
 						}

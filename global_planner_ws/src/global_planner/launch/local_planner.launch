@@ -1,4 +1,5 @@
 <launch>
 	<rosparam command="load" file="$(find global_planner)/params/cfg.yaml"/>
 	<node name="global_planner_node" type="global_planner_node" pkg="global_planner" output="screen"/>
+	<node name="twist_pub_node" pkg="global_planner" type="twist_pub_node" output="screen"/>
 </launch>
