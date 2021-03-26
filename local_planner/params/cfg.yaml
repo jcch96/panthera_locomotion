@@ -1,3 +1,4 @@
 costmap_topic: "/map"
-length: 1.4
-width: 1.0
+robot_length: 0.86
+robot_width: 0.56
+safety_dist: 0.3
