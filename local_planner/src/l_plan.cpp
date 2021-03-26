@@ -25,19 +25,23 @@ class Robot
 		ros::Publisher cmap_clear;
 
 		// Footprint info
-		float length, width;
+		double length, width;
+		std::array<int,2> left_back, left_front, right_back, right_front;
 
 		float safety_dist;
 		int buffer; // number of squares safety distance
+		int clear_tolerance;
+
+		// search area
+		int l1,l2,l3,l4,r1,r2,r3,r4,f1,f2,f3,f4;
 
 		// Map info
-		double len_x, len_y, res;
-		int left_bound, right_bound;
-		std::array<int,2> vert_bound, forward_bound;
-
-		std::vector<std::vector<int>> map_mat;
-
+		int len_x, len_y;
+		double res;
 		local_planner::CmapClear bools;
+
+		// run once
+		int n = 0;
 
 	public:
 		Robot(ros::NodeHandle *nh)
@@ -46,9 +50,10 @@ class Robot
 			CmdVelPub = nh->advertise<geometry_msgs::Twist>("panthera_cmd",100);
 			cmap_clear = nh->advertise<local_planner::CmapClear>("check_cmap",100);
 
-			length = nh->getParam("/robot_length", length);
-			width = nh->getParam("/robot_width", width);
-			safety_dist = nh->getParam("/safety_dist", safety_dist);
+			length = nh->param("/robot_length", 1.0);
+			width = nh->param("/robot_width", 0.5);
+			safety_dist = nh->param("/safety_dist", 0.5);
+			clear_tolerance = nh->param("/clear_tolerance", 1);
 		}
 
 		void mapCallback(const nav_msgs::OccupancyGrid& msg)
@@ -56,127 +61,157 @@ class Robot
 			len_x = msg.info.width;
 			len_y = msg.info.height;
 			res = msg.info.resolution;
-			auto data_pts = msg.data;
-			fpCoordinates();
-			int n = 0;
-			std::vector<std::vector<int>> temp_mat;
-			for (int i=0; i<(int)len_x; i++)
-			{	
-				std::vector<int> v = {};
-				for (int j=0; j<(int)len_y; j++)
-				{	
-					v.push_back(data_pts[n]);
-					n++;
-				}
-				temp_mat.push_back(v);
+			if (n == 0)
+			{
+				fpCoordinates();
+				n += 1;
 			}
-			//std::cout << temp_mat[0][0] << std::endl;
-			map_mat = temp_mat;
-			checkclear();
+			std::vector<signed char> data_pts = msg.data;
+			checkclear(data_pts);
+			
 
+		}
+
+		void searchArea()
+		{
+			// left area search [l1:l2] and [l3:l4]
+			l1 = left_back[0] - buffer + left_back[1] * len_x;
+			l2 = left_front[0] + buffer + left_front[1] * len_x;
+			l3 = left_back[0] - buffer + (left_back[1] + buffer) * len_x;
+			l4 = left_front[0] + buffer + (left_front[1] + buffer) * len_x;
+
+			// right area search [r1:r2] and [r3:r4]
+			r1 = right_back[0] - buffer + right_back[1] * len_x;
+			r2 = right_front[0] + buffer + right_front[1] * len_x;
+			r3 = right_back[0] - buffer + (right_back[1] - buffer) * len_x;
+			r4 = right_front[0] + buffer + (right_front[1] - buffer) * len_x;
+
+			// front area search [f1:f3] and [f2:f4]
+			f1 = right_front[0] + (right_front[1] - buffer) * len_x;
+			f2 = right_front[0] + buffer + (right_front[1] - buffer) * len_x;
+			f3 = left_front[0] + (left_front[1] + buffer) * len_x;
+			f4 = left_front[0] + buffer + (left_front[1] + buffer) * len_x;
+			
+			std::cout << l1 << ' ' << l2 << ' ' << l3 << ' ' << l4 << std::endl;
+			std::cout << r1 << ' ' << r2 << ' ' << r3 << ' ' << r4 << std::endl;
+			std::cout << f1 << ' ' << f2 << ' ' << f3 << ' ' << f4 << std::endl;
+			
 		}
 
 		void fpCoordinates()
 		{
-			double centre[2];
+			float centre[2];
 			centre[0] = len_x/2;
 			centre[1] = len_y/2;
 
-			float horz_dist = width/2; // x axis
-			float vert_dist = length/2; // y axis
+			float horz_dist = width/2; // x axis robot width
+			float vert_dist = length/2; // y axis robot length
 
 			int horz_pix = (int)ceil(horz_dist/res);
 			int vert_pix = (int)ceil(vert_dist/res);
-
-			left_bound = (int)ceil(centre[1]) - vert_pix;
-			right_bound = (int)round(centre[1]) + vert_pix;
-			vert_bound = {(int)round(centre[0]) - vert_pix, (int)ceil(centre[0]) + vert_pix};
-
-			forward_bound = {left_bound, right_bound};
-
 			buffer = (int)ceil(safety_dist/res);
+
+			left_back[0] = (int)round(centre[0] - vert_pix);
+			left_back[1] = (int)ceil(centre[1] + horz_pix);
+
+			left_front[0] = (int)ceil(centre[0] + vert_pix);
+			left_front[1] = (int)ceil(centre[1] + horz_pix);
+
+			right_back[0] = (int)round(centre[0] - vert_pix);
+			right_back[1] = (int)round(centre[1] - horz_pix);
+
+			right_front[0] = (int)ceil(centre[0] + vert_pix);
+			right_front[1] = (int)ceil(centre[1] - horz_pix);
+
+			searchArea();
+
 			//printf("footprinted\n");
-			/**
-			std::cout << "left: " <<  left_bound << " " << left_bound - buffer << std::endl;
-			std::cout << "right: " << right_bound << " " << right_bound + buffer << std::endl;
-			std::cout << "vert: " << vert_bound[0] << " " << vert_bound[1] << std::endl;
-			std::cout << "centre: " << centre[0] << " " << centre[1] << std::endl;
-			**/
+			std::cout << buffer << std::endl;
+			std::cout << horz_pix << " " << vert_pix << std::endl;
+			std::cout << left_back[0] << " " << left_back[1] << std::endl;
+			std::cout << right_back[0] << " " << right_back[1] << std::endl;
+			std::cout << left_front[0] << " " << left_front[1] << std::endl;
+			std::cout << right_front[0] << " " << right_front[1] << std::endl;
+			
 		}
 
-		void checkclear()
+		void checkclear(std::vector<signed char> cmap)
 		{	
-			bool left_clear=true, right_clear=true, up_clear=true;
-			// right clear
-			//printf("checking1\n");
-			for (int i = right_bound; i <= right_bound + buffer; i++)
-			{	
-				if (right_clear == false)
-				{
-					break;
-				}
-				for (int j = vert_bound[0] - buffer; j <= vert_bound[1] + buffer; j++)
-				{	
-					if (map_mat[j][i] == 100)
-					{
-						right_clear = false;
-						//std::cout << map_mat[j][i] << std::endl;
-						//printf("right clear false\n");
-						break;
-					}
-					//std::cout << map_mat[j][i] << std::endl;
-				}
-			}
-			// up clear
-			//printf("checking2\n");
-			for (int i = left_bound - buffer; i <= right_bound + buffer; i++)
-			{	
-				if (up_clear == false)
-				{
-					break;
-				}
-				for (int j = vert_bound[1]; j <= vert_bound[1] + buffer; j++)
-				{
-					if (map_mat[j][i] == 100)
-					{
-						up_clear = false;
-						//std::cout << map_mat[j][i] << std::endl;
-						//printf("up clear false\n");
-						break;
-					}
-					//std::cout << map_mat[j][i] << std::endl;
-				}
-			}
 
+			bool left_clear=true, right_clear=true, up_clear=true;
 			// left clear
-			//printf("checking3\n");
-			for (int i = left_bound - buffer; i <= left_bound; i++)
-			{	
-				//std::cout << i << std::endl;
-				if (left_clear == false)
+			int l=0, r=0,u=0;
+			for (int i = l1; i <= l3; i+=len_x)
+			{
+				for (int j = i; j <= i + (l2 - l1); j++)
 				{
-					break;
-				}
-				for (int j = vert_bound[0]; j <= vert_bound[1] + buffer; j++)
-				{
-					if (map_mat[j][i] == 100)
+					if (cmap[j] > 0)
 					{
-						left_clear = false;
-						//std::cout << map_mat[j][i] << std::endl;
-						//printf("left clear false\n");
-						break;
+						//left_clear = false;
+						l += 1;
+						if (l>=clear_tolerance)
+						{
+							goto endleft;
+						}
+						//break;
 					}
-					//std::cout << map_mat[j][i] << std::endl;
 				}
 			}
+			endleft:
+
+			// right clear
+			for (int i = r3; i <= r1; i+=len_x)
+			{
+				for (int j = i; j <= i + (r2 - r1); j++)
+				{
+					if (cmap[j] > 0)
+					{
+						r+=1;
+						if (r>=clear_tolerance)
+						{
+							goto endright;
+						}
+					}
+				}
+			}
+			endright:
+
+			// up clear
+			for (int i = f1; i <= f2; i+=len_x)
+			{
+				for (int j = i; j <= i + (f2-f1); j++)
+				{
+					if (cmap[j] > 0)
+					{
+						u+=1;
+						if (u>=clear_tolerance)
+						{
+							goto endup;
+						}
+					}
+				}
+			}
+			endup:
+			
 			//printf("checked\n");
+			if (l>=clear_tolerance)
+			{
+				left_clear=false;
+			}
+			if (r>=clear_tolerance)
+			{
+				right_clear=false;
+			}
+			if (u>=clear_tolerance)
+			{
+				up_clear=false;
+			}
 			auto* bl = &bools;
 			bl->right = right_clear;
 			bl->left = left_clear;
 			bl->up = up_clear;
 			cmap_clear.publish(*bl);
 			std::cout << *bl << std::endl;
-			
 		}
 };
 
